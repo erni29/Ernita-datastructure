@@ -1,0 +1,77 @@
+#include <stdio.h>
+
+typedef struct {
+    float radius;
+} Circle;
+
+typedef struct {
+    float sideLength;
+} Square;
+
+typedef struct {
+    float length;
+    float width;
+} Rectangle;
+
+typedef union {
+    Circle circle;
+    Square square;
+    Rectangle rectangle;
+} Shape;
+
+float calculateCircleArea(float radius) {
+    return 3.14159 * radius * radius;
+}
+
+float calculateSquareArea(float sideLength) {
+    return sideLength * sideLength;
+}
+
+float calculateRectangleArea(float length, float width) {
+    return length * width;
+}
+
+int main() {
+    int numShapes;
+    printf("Enter the number of shapes: ");
+    scanf("%d", &numShapes);
+
+    Shape shapes[numShapes];
+
+    for (int i = 0; i < numShapes; i++) {
+        int shapeType;
+        printf("Enter type of shape (0 for circle, 1 for square, 2 for rectangle) for shape %d: ", i + 1);
+        scanf("%d", &shapeType);
+
+        if (shapeType == 0) {
+            printf("Enter radius of circle: ");
+            scanf("%f", &shapes[i].circle.radius);
+        } else if (shapeType == 1) {
+            printf("Enter side length of square: ");
+            scanf("%f", &shapes[i].square.sideLength);
+        } else if (shapeType == 2) {
+            printf("Enter length and width of rectangle: ");
+            scanf("%f %f", &shapes[i].rectangle.length, &shapes[i].rectangle.width);
+        }
+    }
+
+    printf("\nAreas of shapes:\n");
+    float largestArea = 0.0;
+
+    for (int i = 0; i < numShapes; i++) {
+        if (i == 0) {
+            printf("Area of circle %d: %.2f\n", i + 1, calculateCircleArea(shapes[i].circle.radius));
+            largestArea = calculateCircleArea(shapes[i].circle.radius);
+        } else if (i == 1) {
+            printf("Area of square %d: %.2f\n", i + 1, calculateSquareArea(shapes[i].square.sideLength));
+            largestArea = calculateSquareArea(shapes[i].square.sideLength);
+        } else if (i == 2) {
+            printf("Area of rectangle %d: %.2f\n", i + 1, calculateRectangleArea(shapes[i].rectangle.length, shapes[i].rectangle.width));
+            largestArea = calculateRectangleArea(shapes[i].rectangle.length, shapes[i].rectangle.width);
+        }
+    }
+
+    printf("Largest area among the shapes: %.2f\n", largestArea);
+
+    return 0;
+}
