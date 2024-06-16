@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+#define MAX_SIZE 100
+
+// Stack structure
+typedef struct {
+    int top;
+    int items[MAX_SIZE];
+} Stack;
+
+// Initialize stack
+void initialize(Stack *s) {
+    s->top = -1;
+}
+
+// Push operation
+void push(Stack *s, int value) {
+    s->items[++s->top] = value;
+}
+
+// Pop operation
+int pop(Stack *s) {
+    return s->items[s->top--];
+}
+
+// Peek operation
+int peek(Stack *s) {
+    return s->items[s->top];
+}
+
+// Check if the stack is empty
+int isEmpty(Stack *s) {
+    return s->top == -1;
+}
+
+// Evaluate infix expression
+int evaluateInfix(char* expression);
+
+// Get precedence of operators
+int precedence(char operator);
+
+// Apply operator to operands
+int applyOperator(int operand1, char operator, int operand2);
+
+int main() {
+    char expression[MAX_SIZE];
+    printf("Enter the infix expression: ");
+    scanf("%s", expression);
+    int result = evaluateInfix(expression);
+    printf("Result of infix expression evaluation: %d\n", result);
+    return 0;
+}
+
+int evaluateInfix(char* expression) {
+    // Implement the evaluateInfix function here
+}
+
+int precedence(char operator) {
+    // Implement the precedence function here
+}
+
+int applyOperator(int operand1, char operator, int operand2) {
+    // Implement the applyOperator function here
+}
+
