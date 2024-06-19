@@ -1,0 +1,115 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Define a struct for a travel destination
+typedef struct {
+    char *name;
+    char *country;
+    int days;
+} Destination;
+
+// Define a struct for an itinerary
+typedef struct {
+    Destination *destinations;
+    int count;
+} Itinerary;
+
+// Function prototypes
+void addDestination(Itinerary *itinerary);
+void viewItinerary(const Itinerary *itinerary);
+void freeItinerary(Itinerary *itinerary);
+char *getStringInput();
+
+int main() {
+    Itinerary itinerary;
+    itinerary.destinations = NULL;
+    itinerary.count = 0;
+
+    int choice;
+    do {
+        printf("Travel Planner Menu:\n");
+        printf("1. Add Destination\n");
+        printf("2. View Itinerary\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        getchar(); // consume newline character left in input buffer
+
+        switch (choice) {
+            case 1:
+                addDestination(&itinerary);
+                break;
+            case 2:
+                viewItinerary(&itinerary);
+                break;
+            case 3:
+                freeItinerary(&itinerary);
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    } while (choice != 3);
+
+    return 0;
+}
+
+void addDestination(Itinerary *itinerary) {
+    // Allocate memory for a new destination
+    itinerary->destinations = realloc(itinerary->destinations, (itinerary->count + 1) * sizeof(Destination));
+    if (itinerary->destinations == NULL) {
+        perror("Failed to allocate memory");
+        exit(EXIT_FAILURE);
+    }
+
+    Destination *newDestination = &itinerary->destinations[itinerary->count];
+    printf("Enter destination name: ");
+    newDestination->name = getStringInput();
+
+    printf("Enter country: ");
+    newDestination->country = getStringInput();
+
+    printf("Enter number of days: ");
+    scanf("%d", &newDestination->days);
+    getchar(); // consume newline character left in input buffer
+
+    itinerary->count++;
+}
+
+void viewItinerary(const Itinerary *itinerary) {
+    if (itinerary->count == 0) {
+        printf("No destinations in the itinerary.\n");
+    } else {
+        for (int i = 0; i < itinerary->count; i++) {
+            Destination dest = itinerary->destinations[i];
+            printf("Destination %d:\n", i + 1);
+            printf("Name: %s\n", dest.name);
+            printf("Country: %s\n", dest.country);
+            printf("Days: %d\n", dest.days);
+        }
+    }
+}
+
+void freeItinerary(Itinerary *itinerary) {
+    for (int i = 0; i < itinerary->count; i++) {
+        free(itinerary->destinations[i].name);
+        free(itinerary->destinations[i].country);
+    }
+    free(itinerary->destinations);
+}
+
+char *getStringInput() {
+    char buffer[100];
+    fgets(buffer, sizeof(buffer), stdin);
+    buffer[strcspn(buffer, "\n")] = '\0'; // remove newline character
+
+    char *str = malloc(strlen(buffer) + 1);
+    if (str == NULL) {
+        perror("Failed to allocate memory");
+        exit(EXIT_FAILURE);
+    }
+    strcpy(str, buffer);
+
+    return str;
+}
